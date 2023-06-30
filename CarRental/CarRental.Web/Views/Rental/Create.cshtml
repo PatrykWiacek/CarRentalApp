@@ -1,10 +1,19 @@
 ﻿@using CarRental.Logic.Models;
+@using Microsoft.AspNetCore.Identity
+@using CarRental.DAL.Entities
 @model RentalCreateViewModel
+
+@inject SignInManager<Customer> SignInManager
+@inject UserManager<Customer> UserManager
 
 @{
     ViewData["Title"] = "Create";
     var customers = (List<object>)Model.Customers;
     var cars = (List<object>)Model.Cars;
+
+    var loggedInUserId = SignInManager.Context.User.Identity.Name;
+    var loggedInUser = await UserManager.FindByNameAsync(loggedInUserId);
+    var customerId = loggedInUser.Id;
 }
 
 <div class="container">
@@ -12,7 +21,7 @@
         <div class="col-6">
             <h2 class="text-primary">Add New Rental</h2>
         </div>
-    </div>
+    </div>`````````````
     <hr />
 
     <div class="row">
@@ -20,11 +29,7 @@
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="CustomerId" class="control-label">Customer</label>
-                    <select asp-for="CustomerId" name="CustomerId" class="form-control">
-                        <partial name="_AvailableOptionsForCustomer" , new { Customers="@Model.Customers" } />
-                    </select>
-                    <span asp-validation-for="CustomerId" class="text-danger"></span>
+                    <input type="hidden" asp-for="CustomerId" value="@customerId"></input>
                 </div>
                 <div class="form-group">
                     <label asp-for="CarId" class="control-label">Car</label>
