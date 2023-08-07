@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CarRental.Logic.Models;
-using CarRental.Logic.Services.IServices;
 using CarRental.Logic.ServicesApi;
 
 namespace CarRentalApi.Controllers;

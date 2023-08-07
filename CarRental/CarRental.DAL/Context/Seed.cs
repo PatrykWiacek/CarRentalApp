@@ -6,7 +6,6 @@ using CarRental.DAL.HelperModels;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Data;
 using System.Globalization;
 
 namespace CarRental.DAL.Context;

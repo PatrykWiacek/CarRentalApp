@@ -1,5 +1,4 @@
 ﻿using CarRental.Logic.Models;
-using CarRental.Logic.Services.IServices;
 using CarRental.Logic.ServicesApi;
 using Microsoft.AspNetCore.Mvc;
 

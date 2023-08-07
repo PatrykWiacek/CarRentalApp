@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace CarRental.Logic.Models;
 
 public class GeneratedReportViewModel

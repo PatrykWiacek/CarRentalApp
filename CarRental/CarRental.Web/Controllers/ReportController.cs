@@ -2,7 +2,6 @@
 using CarRental.Logic.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace CarRental.Web.Controllers;
 

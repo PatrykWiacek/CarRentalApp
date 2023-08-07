@@ -6,7 +6,6 @@ using CarRental.Logic.Models;
 using CarRental.Logic.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
-using static System.Net.WebRequestMethods;
 
 namespace CarRental.Logic.Services;
 public class ReportService : IReportService // ReportService

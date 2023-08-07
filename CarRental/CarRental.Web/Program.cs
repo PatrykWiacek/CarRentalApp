@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using AutoMapper;
 using CarRental.DAL.Context;
 using CarRental.DAL.Entities;
@@ -60,28 +59,13 @@ builder.Services.AddIdentity<Customer, IdentityRole<int>>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
-//builder.Services.AddTransient<ICustomerService, CustomerService>();
-//builder.Services.AddTransient<ICarService, CarService>();
-//builder.Services.AddTransient<IRentalService, RentalService>();
-//builder.Services.AddTransient<ICommonService, CommonService>();
-
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICarService, CarService>(); 
 builder.Services.AddScoped<IRentalService, RentalService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
 builder.Services.AddScoped<IEmailService, EmailService>();
-
-//builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(CustomerProfile));
-
-//Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), "LogsAnd", autoCreateSqlTable:true).CreateLogger();
-//Serilog.Debugging.SelfLog.Enable(msg =>
-//{
-//    Debug.Print(msg);
-//    Debugger.Break();
-//});
 
 // Validation
 builder.Services.AddScoped<IValidator<CustomerViewModel>, CustomerViewModelValidator>();
@@ -94,7 +78,7 @@ builder.Services.AddScoped<RoleManager<IdentityRole<int>>>();
 
 var app = builder.Build();
 
-//CreateDbIfNotExists(app);
+CreateDbIfNotExists(app);
 
 // Check if all mappings are configured
 var mapper = (IMapper)app.Services.GetService(typeof(IMapper));
@@ -147,7 +131,6 @@ static void CreateDbIfNotExists(IHost host)
         var userManager = services.GetRequiredService<UserManager<Customer>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
-        //context.Database.EnsureDeleted();
         Seed.Initialize(context, userManager, roleManager)
             .Wait();
     }

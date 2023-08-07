@@ -53,7 +53,7 @@ public class EmailService : IEmailService
             }
 
             var mailData = new EmailData(
-            new List<string> { "patrykwiacek00@gmail.com" },
+            new List<string> { "tfwotofo@gmail.com" },
             "Daily Report",
             emailBody.ToString(),
             null,

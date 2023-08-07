@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CarRental.Common;
-
-namespace CarRental.Web.Models;
+﻿namespace CarRental.Web.Models;
 
 public class EmailData
 {

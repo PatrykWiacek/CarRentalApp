@@ -1,4 +1,3 @@
-using AutoMapper;
 using CarRental.Logic.Models;
 using CarRental.Logic.Services.IServices;
 using CarRental.Web.Models;

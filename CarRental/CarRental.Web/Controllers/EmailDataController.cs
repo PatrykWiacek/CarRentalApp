@@ -1,6 +1,4 @@
-﻿using MailKit.Net.Smtp;
-using Microsoft.AspNetCore.Mvc;
-using MimeKit;
+﻿using Microsoft.AspNetCore.Mvc;
 using CarRental.Web.Models;
 
 namespace CarRental.Web.Controllers
