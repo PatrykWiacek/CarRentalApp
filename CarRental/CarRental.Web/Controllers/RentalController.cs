@@ -72,17 +72,18 @@ public class RentalController : Controller
     }
 
     // GET: RentalConroller/Create
-    public IActionResult Create()
+    public IActionResult Create(CarViewModel carFromDetails)
     {
         var shortCustomers = GetShortCustomers();
         var shortCars = GetShortCars();
+        var carToRent = _carService?.Get(carFromDetails.Id);
         var temp = DateTime.Now;
         var beginDate = new DateTime(temp.Year, temp.Month, temp.Day, temp.Hour, temp.Minute, 0);
 
         var model = new RentalCreateViewModel
         {
             Customers = shortCustomers,
-            Cars = shortCars,
+            Car = carToRent,
             BeginDate = beginDate,
             EndDate = beginDate.AddDays(1),
             TotalCost = 0m,
@@ -116,10 +117,10 @@ public class RentalController : Controller
                 EndDate = model.EndDate,
                 TotalCost = model.TotalCost,
                 Customers = shortCustomers,
-                Cars = shortCars,
+                Car = model.Car,
             };
 
-            decimal carPricePerDay = (decimal)_carService!.Get(model.CarId)!.Price;
+            decimal carPricePerDay = (decimal)_carService!.Get(model.Car.Id)!.Price;
             rentalModel.TotalCost = _rentalService.GetRentalTotalPrice(carPricePerDay, rentalModel.BeginDate, rentalModel.EndDate);
 
             _rentalService.Create(rentalModel);

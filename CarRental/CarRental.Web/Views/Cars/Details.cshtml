@@ -25,11 +25,13 @@
         <partial name="Buttons/_ButtonBackToList" />
     </div>
     <div>
-        <button type="button" class="btn btn-secondary app-button" data-bs-toggle="tooltip" data-bs-placement="top" title="Rent this Car">
-            <a asp-controller="Rental" asp-action="Create" asp-route-id="@Model.Id" class="none-underline text-black">
-                Rent this Car
-            </a>
-        </button>
+        <form method="post">
+            <button type="button" class="btn btn-secondary app-button" data-bs-toggle="tooltip" data-bs-placement="top" title="Rent this Car">
+                <a asp-controller="Rental" asp-action="Create" asp-route-id="@Model.Id" value="@Model.Id" class="none-underline text-black">
+                    Rent this Car
+                </a>
+            </button>
+        </form>
         <button type="button" class="btn btn-secondary app-button" data-bs-toggle="tooltip" data-bs-placement="top" title="Return this Car">
             <a asp-action="Return" class="none-underline text-black">
                 Return this Car

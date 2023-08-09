@@ -23,4 +23,5 @@ public class RentalViewModel
     public DateTime? Updated { get; set; } //TODO remove from here
     public List<object> Customers { get; set; } = new();
     public List<object> Cars { get; set; } = new();
+    public CarViewModel Car { get; set; }
 }

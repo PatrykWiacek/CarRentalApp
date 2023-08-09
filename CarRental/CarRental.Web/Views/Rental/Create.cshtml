@@ -33,9 +33,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="CarId" class="control-label">Car</label>
-                    <select id="car" asp-for="CarId" name="CarId" class="form-control">
-                        <partial name="_AvailableOptionsForCar" , new { Cars="@Model.Cars" } />
-                    </select>
+                    <a>@Model.Car.Make @Model.Car.LicencePlateNumber </a>
                     <span asp-validation-for="CarId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
