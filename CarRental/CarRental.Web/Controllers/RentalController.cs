@@ -1,6 +1,7 @@
 ﻿using CarRental.Logic.Models;
 using CarRental.Logic.Services.IServices;
 using CarRental.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRental.Web.Controllers;
@@ -72,6 +73,7 @@ public class RentalController : Controller
     }
 
     // GET: RentalConroller/Create
+    [Authorize]
     public IActionResult Create(CarViewModel carFromDetails)
     {
         var shortCustomers = GetShortCustomers();
