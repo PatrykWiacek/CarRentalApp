@@ -74,21 +74,19 @@ public class RentalController : Controller
 
     // GET: RentalConroller/Create
     [Authorize]
-    public IActionResult Create(CarViewModel carFromDetails)
+    public IActionResult Create(CarViewModel car)
     {
-        var shortCustomers = GetShortCustomers();
-        var shortCars = GetShortCars();
-        var carToRent = _carService?.Get(carFromDetails.Id);
+        var carToRent = _carService?.Get(car.Id);
         var temp = DateTime.Now;
         var beginDate = new DateTime(temp.Year, temp.Month, temp.Day, temp.Hour, temp.Minute, 0);
 
         var model = new RentalCreateViewModel
         {
-            Customers = shortCustomers,
             Car = carToRent,
             BeginDate = beginDate,
             EndDate = beginDate.AddDays(1),
             TotalCost = 0m,
+            CarId = car.Id
         };
 
         return View(model);
@@ -99,10 +97,7 @@ public class RentalController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create(RentalCreateViewModel model)
     {
-        var shortCustomers = GetShortCustomers();
-        var shortCars = GetShortCars();
-        model.Customers = shortCustomers;
-        model.Cars = shortCars;
+        var carToRent = _carService?.Get(model.CarId);
 
         try
         {
@@ -118,8 +113,7 @@ public class RentalController : Controller
                 BeginDate = model.BeginDate,
                 EndDate = model.EndDate,
                 TotalCost = model.TotalCost,
-                Customers = shortCustomers,
-                Car = model.Car,
+                Car = carToRent,
             };
 
             decimal carPricePerDay = (decimal)_carService!.Get(model.Car.Id)!.Price;
