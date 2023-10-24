@@ -1,5 +1,6 @@
 ﻿using CarRental.Common.Enums;
 using Microsoft.AspNetCore.Identity;
+using System.Net.NetworkInformation;
 
 namespace CarRental.DAL.Entities;
 
