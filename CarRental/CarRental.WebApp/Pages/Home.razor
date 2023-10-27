@@ -1,0 +1,42 @@
+﻿<h3>Home</h3>
+
+<div class="p-0 text-center bg-image home-image">
+    <div class="mask" style="background-color: rgba(0, 0, 0, 0.2); height: 500px;">
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="text-white home-container">
+                <h1>Car Rental – Search, Compare & Save</h1>
+                <h2>Free cancellations on most bookings 60,000+ locations Customer support in 40+ languages</h2>
+                <form class="d-flex pt-3" asp-controller="Cars" asp-action="Index" method="post">
+                    <input class="form-control shadow-sm me-2 search opacity-75  " asp-for="SearchDto.ModelAndMake" type="text" placeholder="Type car maker or car model" aria-label="Search">
+                    <select asp-for="SearchDto.ProductionYearFrom" id="" name="SearchDto.ProductionYearFrom" class="form-control year shadow-sm opacity-75 me-2">
+                        <partial name="_AvailableOptionsForYearFrom" />
+                    </select>
+                    <select asp-for="SearchDto.ProductionYearTo" id="" name="SearchDto.ProductionYearTo" class="form-control year shadow-sm opacity-75 me-2">
+                        <partial name="_AvailableOptionsForYearTo" />
+                    </select>
+
+                    <input class="form-control shadow-sm me-2 date opacity-75" asp-for="SearchDto.StartDate" asp-format="{0:yyyy-MM-dd HH:mm}" />
+                    <input class="form-control shadow-sm me-2 date opacity-75" asp-for="SearchDto.EndDate" asp-format="{0:yyyy-MM-dd HH:mm}" />
+                    <button class="btn btn-outline-success shadow-sm fw-bold" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+         @foreach (var item in Cars)
+        {
+        <div class="card col-3 me-4 mt-4 shadow-lg" style="width: 18rem;">
+        <img class="card-img-top card-image-height" src="@item.Image" alt="Card image cap">
+        <div class="card-body">
+        <h5 class="card-title">@item.Make @item.CarModelProp</h5>
+        <p class="card-text">Year: @item.Year</p>
+        <p class="card-text">Transmission: @item.Transmission</p>
+        <p class="card-text">Engine type: @item.EngineType</p>
+        <a class="btn btn-outline-success fw-bold" asp-controller="Cars" asp-action="Details" asp-route-id="@item.Id">Show details</a>
+        </div>
+        </div>
+        } 
+    </div>
+</div>

@@ -1,9 +1,6 @@
-﻿using CarRental.Test.Models;
-using Microsoft.AspNetCore.Components;
+﻿namespace CarRental.Test.Models;
 
-namespace CarRental.WebBlazor.Pages;
-
-public partial class Index
+public class SearchViewModel
 {
     public SearchFieldsModel SearchDto { get; set; } = new SearchFieldsModel();
     public IEnumerable<CarViewModel> Cars { get; set; } = new List<CarViewModel>();
