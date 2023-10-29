@@ -1,11 +1,11 @@
 ﻿using CarRental.Logic.Models;
-using CarRental.Logic.ServicesApi;
+using CarRental.Logic.ServicesApi.IServiceApi;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentalApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class VisitedCarController : ControllerBase
 {
     private readonly ILogger<VisitedCarController> _logger;

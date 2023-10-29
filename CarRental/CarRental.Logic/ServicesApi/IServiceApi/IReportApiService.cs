@@ -1,6 +1,6 @@
 ﻿using CarRental.Logic.Models;
 
-namespace CarRental.Logic.ServicesApi;
+namespace CarRental.Logic.ServicesApi.IServiceApi;
 public interface IReportApiService
 {
     Task CreateVisitedCarAsync(VisitedCarViewModel model);

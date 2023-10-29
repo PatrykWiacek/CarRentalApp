@@ -25,12 +25,12 @@ public class CarService : ICarService
         _logger = logger;
         _validator = validator;
     }
-
-    public IEnumerable<CarViewModel> GetAll()
+    
+    public async Task<IEnumerable<CarViewModel>> GetAll()
     {
         List<Car> cars = _carRepository.GetAll() ?? new List<Car>();
         var result = _mapper.Map<List<CarViewModel>>(cars);
-        return result;
+        return await Task.FromResult(result);
     }
 
     public void Create(CarViewModel model)
@@ -44,9 +44,9 @@ public class CarService : ICarService
         _logger.LogInformation($"Car ({car.Make}, {car.CarModelProp}, {car.Year}, {car.LicencePlateNumber}) was created.");
     }
 
-    public CarViewModel? Get(int id)
+    public async Task<CarViewModel>? Get(int id)
     {
-        var car = _carRepository.Get(id);
+        var car = await Task.Run(() => _carRepository.Get(id));
 
         if (car == null)
         {
@@ -55,13 +55,13 @@ public class CarService : ICarService
         return _mapper.Map<CarViewModel>(car);
     }
 
-    public void Delete(int id)
+    public async Task Delete(int id)
     {
         _carRepository.Delete(id);
         _logger.LogInformation($"Car with id {id} was deleted.");
     }
 
-    public void Update(CarViewModel model)
+    public async Task Update(CarViewModel model)
     {
         if (!IsAllValid(model))
         {
@@ -72,7 +72,7 @@ public class CarService : ICarService
         _logger.LogInformation($"Car with id {car.Id} was updated.");
     }
 
-    public IEnumerable<CarViewModel> FindCars(IEnumerable<CarViewModel> collection, SearchFieldsModel sfModel)
+    public async Task<IEnumerable<CarViewModel>> FindCars(IEnumerable<CarViewModel> collection, SearchFieldsModel sfModel)
     {
         if (sfModel.Makes.Values.All(m => m == false))
         {
@@ -81,7 +81,7 @@ public class CarService : ICarService
         }
         if (sfModel.Makes.Values.Contains(true))
         {
-            collection = FindCarsByMaker(collection, sfModel);
+            collection = await FindCarsByMaker(collection, sfModel);
         }
         if (!string.IsNullOrEmpty(sfModel.ModelAndMake))
         {
@@ -94,16 +94,27 @@ public class CarService : ICarService
 
         if (sfModel.StartDate != null && sfModel.EndDate != null)
         {
-            collection = FindCarByDate(collection, sfModel);
+            collection = await FindCarByDate(collection, sfModel);
         }
         return collection.ToList();
     }
 
-    private IEnumerable<CarViewModel> FindCarsByMaker(IEnumerable<CarViewModel> collection, SearchFieldsModel sfModel)
+    private async Task<IEnumerable<CarViewModel>> FindCarsByMaker(IEnumerable<CarViewModel> collection, SearchFieldsModel sfModel)
     {
+        //var selectedMakes = sfModel.Makes.Where(m => m.Value == true).Select(m => m.Key);
+        //collection =  GetAll()
+        //    .Where(c => selectedMakes.Contains(c.Make, StringComparer.CurrentCultureIgnoreCase)).ToList();
+        //return collection.ToList();
+
         var selectedMakes = sfModel.Makes.Where(m => m.Value == true).Select(m => m.Key);
-        collection = GetAll()
-            .Where(c => selectedMakes.Contains(c.Make, StringComparer.CurrentCultureIgnoreCase)).ToList();
+        
+        var cars = await GetAll();
+
+
+        collection = cars
+            .Where(c => selectedMakes.Contains(c.Make, StringComparer.CurrentCultureIgnoreCase))
+            .ToList();
+
         return collection.ToList();
     }
 
@@ -120,27 +131,39 @@ public class CarService : ICarService
         return collection.ToList();
     }
 
-    private IEnumerable<CarViewModel> FindCarByDate(IEnumerable<CarViewModel> collection, SearchFieldsModel sfModel)
+    private async Task<IEnumerable<CarViewModel>> FindCarByDate(IEnumerable<CarViewModel> collection, SearchFieldsModel sfModel)
     {
-        var availableCarIds = GetAvailableCarIdsForSearch(sfModel.StartDate, sfModel.EndDate);
-        collection = collection.Where(c => availableCarIds.Contains(c.Id));
+        var availableCarIds = await GetAvailableCarIdsForSearch(sfModel.StartDate, sfModel.EndDate);
+        collection = collection.Where(c =>  availableCarIds.Contains(c.Id));
 
         return collection.ToList();
     }
 
-    private IEnumerable<int> GetAvailableCarIdsForSearch(DateTime start, DateTime end)
+    private async Task<IEnumerable<int>> GetAvailableCarIdsForSearch(DateTime start, DateTime end)
     {
-        var cars1 = GetNotRentedForSearch();
+        var cars1 = await GetNotRentedForSearch();
         var cars2 = GetAvailableInGivenTimeForSearch(start, end);
         var allIdCars = cars1.Concat(cars2).Distinct().ToList();
         return allIdCars;
     }
-    private IEnumerable<int> GetNotRentedForSearch()
+    private async Task<IEnumerable<int>> GetNotRentedForSearch()
     {
+        //var rentedIds = _rentalRepository.GetAll()
+        //    .Select(r => r.CarId).ToList();
+
+        //var carIds = GetAll()
+        //    .Select(c => c.Id).ToList();
+
+        //var availableCarIds = carIds.Except(rentedIds).ToList();
+
+        //return availableCarIds;
+
         var rentedIds = _rentalRepository.GetAll()
             .Select(r => r.CarId).ToList();
 
-        var carIds = GetAll()
+        var cars = await GetAll();
+
+        var carIds = cars
             .Select(c => c.Id).ToList();
 
         var availableCarIds = carIds.Except(rentedIds).ToList();

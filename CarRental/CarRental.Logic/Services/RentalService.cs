@@ -99,11 +99,12 @@ public class RentalService : IRentalService
         return rentals.Where(r => r.CarId == carId);
     }
 
-    public IEnumerable<CarViewModel> GetCarsAvailableInTerm(Term wantedTerm)
+    public async Task<IEnumerable<CarViewModel>> GetCarsAvailableInTerm(Term wantedTerm)
     {
         var availableCarIds = GetIdsForCarsAvailableInTerm(wantedTerm);
-        var cars = _carService.GetAll().Where(c => availableCarIds.Contains(c.Id)).ToList();
-        return cars;
+        var cars = await _carService.GetAll();
+        var availableCar = cars.Where(c => availableCarIds.Contains(c.Id)).ToList();
+        return availableCar;
     }
 
     public IEnumerable<T> FilterByPredicate<T>(IQueryable<T> collection, Func<T, bool> predicate)

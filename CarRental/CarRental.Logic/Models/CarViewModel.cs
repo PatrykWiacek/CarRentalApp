@@ -2,6 +2,8 @@
 using CarRental.Common.Enums;
 using CarRental.Common.Extensions;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace CarRental.Logic.Models;
 public class CarViewModel
@@ -36,7 +38,7 @@ public class CarViewModel
         set => _licencePlateNumber = value != null ?
             value.RemoveWhitespaces().ToUpper() : null;
     }
-
+    
     public CarColor? Color { get; set; }
     [Display(Name = "Transmission Type")]
     public TransmissionType? Transmission { get; set; }

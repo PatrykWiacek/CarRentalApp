@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CarRental.Logic.Models;
-using CarRental.Logic.ServicesApi;
+using CarRental.Logic.ServicesApi.IServiceApi;
 
 namespace CarRentalApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class LastLoggedController : ControllerBase
 {
     private readonly IReportApiService _reportApiService;

@@ -2,7 +2,16 @@ using CarRental.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using CarRental.Logic.MapperProfiles;
 using CarRental.DAL.Repositories;
+using CarRental.Logic.Models;
+using CarRental.Logic.Services;
+using CarRental.Logic.Services.IServices;
 using CarRental.Logic.ServicesApi;
+using CarRental.Logic.ServicesApi.IServiceApi;
+using CarRental.Logic.Validators;
+using FluentValidation;
+using CarRental.DAL.Entities;
+using CarRental.Logic.MailConf;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,9 +27,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IReportApiService, ReportApiService>();
+builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddAutoMapper(typeof(CustomerProfile));
+
+// Validation
+builder.Services.AddScoped<IValidator<CarViewModel>, CarViewModelValidator>();
+
 
 var app = builder.Build();
 

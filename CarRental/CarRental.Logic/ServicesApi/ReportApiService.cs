@@ -2,6 +2,7 @@
 using CarRental.DAL.Entities;
 using CarRental.DAL.Repositories;
 using CarRental.Logic.Models;
+using CarRental.Logic.ServicesApi.IServiceApi;
 
 namespace CarRental.Logic.ServicesApi;
 public class ReportApiService : IReportApiService

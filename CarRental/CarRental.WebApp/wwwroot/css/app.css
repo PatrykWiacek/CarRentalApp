@@ -131,6 +131,7 @@ body {
 
 .navbar {
     background-color: dimgray;
+    max-height: 4.5rem !important;
 }
 
 .navbar-brand {
