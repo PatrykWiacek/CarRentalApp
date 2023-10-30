@@ -21,12 +21,12 @@ public class CarsController : Controller
     }
 
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         var temp = DateTime.Now;
         var model = new SearchViewModel()
         {
-            Cars = _carService.GetAll(),
+            Cars = await _carService.GetAll(),
             SearchDto = new SearchFieldsModel()
             {
                 StartDate = temp,
@@ -38,27 +38,27 @@ public class CarsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Index(SearchViewModel search)
+    public async Task<IActionResult> Index(SearchViewModel search)
     {
         var dto = search.SearchDto;
-        var carModels = _carService.GetAll().ToList();
-        carModels = _carService.FindCars(carModels, dto).ToList();
+        var carModels = await _carService.GetAll();
+        carModels = await _carService.FindCars(carModels, dto);
         search.Cars = carModels;
         return View(nameof(Index), search);
     }
     // GET: CarController
     [Authorize(Roles = "Admin")]
-    public IActionResult List()
+    public async Task<IActionResult> List()
     {
-        var cars = _carService.GetAll();
+        var cars = await _carService.GetAll();
         return View(cars);
     }
 
     // GET: CarController/Details/5
-    public IActionResult Details(int id)
+    public async Task<IActionResult> Details(int id)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var car = _carService.Get(id);
+        var car = await _carService.Get(id);
         _userActivityService.ReportCarVisitAsync(car, userId);
         return View(car);
     }
@@ -97,9 +97,9 @@ public class CarsController : Controller
 
     // GET: CarController/Edit/5
     [Authorize(Roles = "Admin")]
-    public IActionResult Edit(int id)
+    public async Task<IActionResult> Edit(int id)
     {
-        var carModel = _carService.Get(id);
+        var carModel = await _carService.Get(id);
         return View(carModel);
     }
 
@@ -125,9 +125,9 @@ public class CarsController : Controller
 
     // GET: CarController/Delete/5
     [Authorize(Roles = "Admin")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var car = _carService.Get(id);
+        var car = await _carService.Get(id);
         TempData["AlertText"] = "You are in danger zone";
         TempData["AlertClass"] = AlertType.Warning;
         return View(car);

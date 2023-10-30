@@ -19,7 +19,7 @@ public class RentalController : Controller
         _rentalService = rentalService;
     }
     // GET: RentalConroller
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         var rentals = _rentalService.GetAll();
 
@@ -30,7 +30,7 @@ public class RentalController : Controller
             var customerName = _customerService?.Get(rental.CustomerId)?.FirstName
                 + " " + _customerService?.Get(rental.CustomerId)?.LastName;
 
-            var carLicencePlate = _carService?.Get(rental.CarId)?.LicencePlateNumber;
+            var carLicencePlate = await _carService?.Get(rental.CarId);
 
             model.Add(new RentalViewModel
             {
@@ -41,7 +41,6 @@ public class RentalController : Controller
                 EndDate = rental.EndDate,
                 TotalCost = rental.TotalCost,
                 CustomerName = customerName,
-                CarLicencePlate = carLicencePlate,
             });
         }
         return View(model);
@@ -54,7 +53,7 @@ public class RentalController : Controller
         dynamic d = GetShortCustomers().FirstOrDefault<object>(rental.CustomerId);
         object shortCustomer = d.FirstName + " " + d.LastName;
 
-        var carLicencePlate = _carService?.Get(rental.CarId)?.LicencePlateNumber;
+        var carLicencePlate = _carService?.Get(rental.CarId);
 
         var rentalViewModel = new RentalViewModel
         {
@@ -66,7 +65,6 @@ public class RentalController : Controller
             TotalCost = rental.TotalCost,
 
             CustomerName = shortCustomer.ToString(),
-            CarLicencePlate = carLicencePlate,
         };
 
         return View(rentalViewModel);
@@ -74,9 +72,9 @@ public class RentalController : Controller
 
     // GET: RentalConroller/Create
     [Authorize]
-    public IActionResult Create(CarViewModel car)
+    public async Task<IActionResult> Create(CarViewModel car)
     {
-        var carToRent = _carService?.Get(car.Id);
+        var carToRent = await _carService?.Get(car.Id);
         var temp = DateTime.Now;
         var beginDate = new DateTime(temp.Year, temp.Month, temp.Day, temp.Hour, temp.Minute, 0);
 
@@ -95,7 +93,7 @@ public class RentalController : Controller
     // POST: RentalConroller/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(RentalCreateViewModel model)
+    public async Task<IActionResult> Create(RentalCreateViewModel model)
     {
         var carToRent = _carService?.Get(model.CarId);
 
@@ -113,10 +111,10 @@ public class RentalController : Controller
                 BeginDate = model.BeginDate,
                 EndDate = model.EndDate,
                 TotalCost = model.TotalCost,
-                Car = carToRent,
+                Car = await carToRent,
             };
 
-            decimal carPricePerDay = (decimal)_carService!.Get(model.Car.Id)!.Price;
+            decimal carPricePerDay = (decimal)_carService!.Get(model.Car.Id)!.AsyncState;
             rentalModel.TotalCost = _rentalService.GetRentalTotalPrice(carPricePerDay, rentalModel.BeginDate, rentalModel.EndDate);
 
             _rentalService.Create(rentalModel);
@@ -156,7 +154,6 @@ public class RentalController : Controller
             TotalCost = (decimal)rentalModel.TotalCost,
 
             Customers = shortCustomers,
-            Cars = shortCars,
         };
         return View(model);
     }
@@ -181,10 +178,10 @@ public class RentalController : Controller
     }
 
     // GET: RentalConroller/Delete/5
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         var rental = _rentalService.Get(id);
-        var car = _carService.Get(rental.CarId);
+        var car = await _carService.Get(rental.CarId);
         var customer = _customerService.Get(rental.CustomerId);
 
         TempData["AlertText"] = "You are in danger zone";
@@ -218,11 +215,12 @@ public class RentalController : Controller
         return _customerService.GetAll().Select(x => new { Id = x.Id, FirstName = x.FirstName, LastName = x.LastName }).ToList<object>();
     }
 
-    private List<object> GetShortCars()
+    private async Task<List<object>> GetShortCars()
     {
-        return _carService.GetAll().Select(x => new { x.Id, x.LicencePlateNumber, x.Make, x.CarModelProp }).ToList<object>();
+        var cars = await _carService.GetAll();
+        return cars.Select(x => new { x.Id, x.LicencePlateNumber, x.Make, x.CarModelProp }).ToList<object>();
     }
-    public decimal GetTotalCost(int carId, DateTime? beginDate = null, DateTime? endDate = null)
+    public async Task<decimal> GetTotalCost(int carId, DateTime? beginDate = null, DateTime? endDate = null)
     {
         if (beginDate == null || endDate == null)
         {
@@ -233,7 +231,8 @@ public class RentalController : Controller
 
         try
         {
-            carPricePerDay = _carService.Get(carId).Price;
+            var car = await _carService.Get(carId);
+            carPricePerDay = car.Price;
         }
         catch (Exception)
         {

@@ -13,6 +13,8 @@ using CarRental.DAL.Entities;
 using CarRental.Logic.MailConf;
 using Microsoft.AspNetCore.Identity;
 
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
@@ -30,14 +32,24 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IReportApiService, ReportApiService>();
+builder.Services.AddScoped<ICustomerApiService, CustomerApiService>();
 builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddAutoMapper(typeof(CustomerProfile));
 
 // Validation
 builder.Services.AddScoped<IValidator<CarViewModel>, CarViewModelValidator>();
 
+builder.Services.AddCors(policy =>
+{
+    policy.AddPolicy("MyAllowSpecificOrigins", builder => builder.WithOrigins("https://localhost:7015/")
+        .SetIsOriginAllowed((host) => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
+});
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -46,7 +58,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
+app.UseRouting();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 

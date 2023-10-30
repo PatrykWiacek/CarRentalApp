@@ -58,8 +58,8 @@
 </div>
 @code {
 
-    private SearchFieldsModel SearchDto { get; set; } = default!;
-    private IEnumerable<CarViewModel> Cars { get; set; } = default!;
+    private IEnumerable<CarViewModel> Cars { get; set; } = new List<CarViewModel>();
+
 
     protected override async void OnInitialized()
     {

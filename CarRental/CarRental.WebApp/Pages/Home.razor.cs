@@ -10,7 +10,8 @@ public partial class Home
 {
     [Inject]
     public ICarApiService? CarApiService { get; set; }
-    public SearchFieldsModel SearchDto { get; set; } = new SearchFieldsModel();
+
+    public string Search { get; set; } = default!;
     private IEnumerable<CarViewModel> Cars { get; set; } = new List<CarViewModel>();
 
     protected override async Task OnInitializedAsync()

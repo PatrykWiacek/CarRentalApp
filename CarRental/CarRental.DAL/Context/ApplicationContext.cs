@@ -11,9 +11,11 @@ public class ApplicationContext : IdentityDbContext<Customer, IdentityRole<int>,
 {
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
+
     }
 
     public DbSet<Car> Cars { get; set; }
+    public DbSet<Customer> Customers { get; set; }
     public DbSet<Rental> Rentals { get; set; }
     public DbSet<LastLoggedReport> LastLoggings { get; set; }
     public DbSet<VisitedCar> VisitedCars { get; set; }

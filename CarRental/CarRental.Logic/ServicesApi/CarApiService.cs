@@ -24,6 +24,7 @@ public class CarApiService : ICarApiService
     {
         try
         {
+
             var apiEndpoint = "https://localhost:7225/api/Car";
             var respone = await _httpClient.GetFromJsonAsync<IEnumerable<CarViewModel>>(apiEndpoint);
             if (respone != null)

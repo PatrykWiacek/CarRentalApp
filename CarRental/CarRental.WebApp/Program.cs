@@ -13,6 +13,7 @@ using CarRental.Logic.Validators;
 using CarRental.WebApp;
 using FluentValidation;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -44,10 +45,11 @@ builder.Services.AddScoped<RoleManager<IdentityRole<int>>>();
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.UseCos
-
 //builder.Services.AddHttpClient<ICarService, CarService>(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
+//builder.Services.AddHttpClient("WebApi", sp => sp.BaseAddress = new Uri("https://localhost:7225/api/Car"));
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+//builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("WebApi"));
+
 
 
 await builder.Build().RunAsync();

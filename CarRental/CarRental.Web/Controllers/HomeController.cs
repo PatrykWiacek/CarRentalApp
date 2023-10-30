@@ -21,12 +21,12 @@ public class HomeController : Controller
         _mailService = mailService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         var temp = DateTime.Now;
         var model = new SearchViewModel()
         {
-            Cars = _carService.GetAll(),
+            Cars = await _carService.GetAll(),
             SearchDto = new SearchFieldsModel()
             {
                 StartDate = temp,

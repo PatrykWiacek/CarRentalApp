@@ -20,6 +20,7 @@ public class CarController : ControllerBase
     public async Task<IEnumerable<CarViewModel>> Get()
     {
         var getAcces = await _carService.GetAll();
+        Response.Headers.Add("Access-Control-Allow-Origin", "https://localhost:7015");
         return getAcces;
     }
 

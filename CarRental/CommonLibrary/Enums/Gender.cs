@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace CarRental.Common.Enums;
 
-[JsonConverter(typeof(StringEnumConverter))]
 public enum Gender
 {
     [EnumMember(Value = "M")]
