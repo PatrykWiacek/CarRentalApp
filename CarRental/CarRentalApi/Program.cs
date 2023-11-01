@@ -34,6 +34,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IReportApiService, ReportApiService>();
 builder.Services.AddScoped<ICustomerApiService, CustomerApiService>();
 builder.Services.AddScoped<ICarService, CarService>();
+builder.Services.AddScoped<IRentalApiService, RentalApiService>();
 builder.Services.AddAutoMapper(typeof(CustomerProfile));
 
 // Validation
